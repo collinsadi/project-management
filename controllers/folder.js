@@ -38,7 +38,7 @@ const createFolder = async (request, response) => {
         let regExp = /\p{P}/gu;
 
         if (regExp.test(folderUniqueName)) {
-            return response.status(400).json(handleError(400, "Folder Unique Has an Invalid Character", "the folder Uniqe Name sent from the Client Contains an Invalid Character  "))
+            return response.status(400).json(handleError(400, "Folder Unique Has an Invalid Character", "the folder Uniqe Name sent from the Client Contains an Invalid Character"))
         }
 
         folderUniqueName = folderUniqueName.toLowerCase()

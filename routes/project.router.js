@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express()
 const authenticateUser = require("../middlewares/authMiddleware")
-const { createProject,editProject,commentOnProject } = require("../controllers/project")
+const { createProject, editProject, commentOnProject, changeProjectType, forkProject } = require("../controllers/project")
 
 const { createFolder,publicGetFolder } = require("../controllers/folder")
 
@@ -12,6 +12,8 @@ const { createFolder,publicGetFolder } = require("../controllers/folder")
 router.post("/new", authenticateUser, createProject)
 router.post("/edit", authenticateUser, editProject)
 router.post("/comment/new", authenticateUser,commentOnProject)
+router.post("/edit/type", authenticateUser,changeProjectType)
+router.post("/fork", authenticateUser,forkProject)
 
 
 /**\

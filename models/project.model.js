@@ -23,7 +23,7 @@ const projectSchema = new mongoose.Schema({
         default:0
     },
     forks: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
+    likes: [String],
     folder: { type: mongoose.Schema.Types.ObjectId, ref: "folder" },
     comments: [
         {
@@ -47,7 +47,9 @@ const projectSchema = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
-    }
+    },
+    forked: Boolean,
+    originalOwner:String
 
 }, { timestamps: true });
 

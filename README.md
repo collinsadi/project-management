@@ -9,6 +9,10 @@
    - 3.1. Create Project
    - 3.2. Update Project
    - 3.3. Comment On Project
+   - 3.4. Create Folder
+   - 3.5. Get User Folder
+   - 3.6. Change Project Type
+   - 3.7. Clone (fork) Project
 4. Data Schema
    - 4.1. Project Data Structure
 5. Security Measures
@@ -74,6 +78,7 @@
     "error_details": "Project type from the client should be either 'public' or 'private' "
     }
     ```
+
 ### 3.2. Update Project
 - **Endpoint:** POST `/api/v1/project/edit`
 - **Description:** Allows Users to Update Projects.
@@ -104,6 +109,7 @@
     "error_details": "Project Was not Found, either the public id is incorrect or the logged in user does not own the project"
     }
     ```
+
 ### 3.3. Comment On Project
 - **Endpoint:** POST `/api/v1/project/comment/new`
 - **Description:** Allows Users to Comment on Projects.
@@ -135,11 +141,13 @@
 ### 3.4. Create Folder
 - **Endpoint:** POST `/api/v1/project/folder/new`
 - **Description:** Allows Other Users to Create a Folder to Oranize their Projects.
-- **Request Parameters:**
+- **Request Body:**
     ```json
    {
-    "username":"user_name", // username of the owner of the folder
-    "folder":"folderUniqueName", // folder unique name of the requested folder
+    "folderName":"Training Projects",
+    "folderUniqueName":"folderUniqueName", // folder unique name
+    "folderDescription":"Some Description", //optional
+    "type":"private" //public or private
    }
 
     ```
@@ -147,43 +155,27 @@
     ```json
     {
     "status": true,
-    "folder": {
-        "_id": "654d13e75cab1400793c728e",
-        "folderName": "Training Projects",
-        "public_id": "d_zsimi-k",
-        "folderUniqueName": "trainingkd",
-        "projects": [
-            {
-                "_id": "654d1557739a988be059e387",
-                "public_id": "houlgwpoi",
-                "projectTitle": "Landing Page",
-                "projectDescription": "Landing Page Design Test2",
-                "likesCount": 0,
-                "commentCount": 0
-            }
-        ],
-        "createdAt": "2023-11-09T17:16:23.693Z"
-    }
-
+    "message": "Folder Created Successfully"
     }
     ```
 - **Response (Error):**
     ```json
     {
     "status": false,
-    "message": "User Not Found",
+    "message": "Folder Unique Has an Invalid Character",
     "error_code": 400,
-    "error_details": "The User attached to the folder does not exis, the username appears to be invalid"
+    "error_details": "the folder Uniqe Name sent from the Client Contains an Invalid Character"
     }
     ```
     ```json
     {
     "status": false,
-    "message": "Folder Not Found",
+    "message": "Folder Exists",
     "error_code": 404,
-    "error_details": "he Request folder does not exist"
+    "error_details": "their is already a folder with this folderUniqueName Associated to this Particular User"
     }
     ```
+
 ### 3.5. Get User Folder
 - **Endpoint:** GET `/api/v1/project/:username/:folder`
 - **Description:** Allows Other Users to Access all public projects in a particular public folder, for a particular user. `|| Not Authenticated`
@@ -234,6 +226,74 @@
     "message": "Folder Not Found",
     "error_code": 404,
     "error_details": "he Request folder does not exist"
+    }
+    ```
+
+### 3.6. Change Project Type
+- **Endpoint:** POST `/api/v1/project/edit/type?project=`
+- **Description:** Allows Users to Change Project Visibility.
+- **Request Query:**
+    ```json
+   {
+    "project":"project_public_id",
+   }
+
+    ```
+- **Request Body:**
+    ```json
+   {
+    "type":"public", // public or private
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "message": "Project Type Updated"
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "Invalid Project Type",
+    "error_code": 400,
+    "error_details": "Project type from the client should be either 'public' or 'private' "
+    }
+    ```
+
+### 3.6. Clone (fork) Project
+- **Endpoint:** POST `/api/v1/project/fork?project=`
+- **Description:** Allows Users to clone other users Project.
+- **Request Query:**
+    ```json
+   {
+    "project":"project_public_id",
+   }
+
+    ```
+- **Request Body:**
+    ```json
+   {
+    "type":"public", // public or private
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "message": "Project Fork Completed"
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "Cant Fork Your Own Project",
+    "error_code": 400,
+    "error_details": "the project is created by the logged in user"
     }
     ```
 
