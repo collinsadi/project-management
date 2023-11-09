@@ -8,7 +8,7 @@
 3. API Endpoints
    - 3.1. Create Project
    - 3.2. Update Project
-   - 3.3. Delete Project
+   - 3.3. Comment On Project
 4. Data Schema
    - 4.1. Project Data Structure
 5. Security Measures
@@ -38,6 +38,8 @@
 ## 3. API Endpoints
 - The Project Management Microservice offers the following API endpoints:
 
+- All Routes are AUthenticated Except Explicitly Excluded in this documentation
+
 ### 3.1. Create Project
 - **Endpoint:** POST `/api/v1/project/new`
 - **Description:** Allows Users to Create Projects.
@@ -49,7 +51,8 @@
     "type":"public",//public or private
     "html":"<h1>Hello World</h1>",
     "css":"h1{color:blue;}",//optional
-    "javascript":"alert('Hello World')"//optional
+    "javascript":"alert('Hello World')",//optional
+    "projectSnapShot":"snapshot_image_url"// to achieve this the frontend should use the "html2canvas JavaScript library" library to take a snap shot of the iframe when the user hit SAVE.
    }
 
     ```
@@ -68,6 +71,64 @@
     "message": "Invalid Project Type",
     "error_code": 400,
     "error_details": "Project type from the client should be either 'public' or 'private' "
+    }
+    ```
+### 3.2. Update Project
+- **Endpoint:** POST `/api/v1/project/edit`
+- **Description:** Allows Users to Update Projects.
+- **Request Body:**
+    ```json
+   {
+    "publicId":"Project_Public_Id",
+    "html":"<h1>Hello World</h1>",
+    "css":"h1{color:blue;}",//optional
+    "javascript":"alert('Hello World')",//optional
+    "projectSnapShot":"snapshot_image_url"// to achieve this the frontend should use the "html2canvas JavaScript library" library to take a snap shot of the iframe when the user hit SAVE.
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "message": "Project Updated Successfully"
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "Project Not Found",
+    "error_code": 400,
+    "error_details": "Project Was not Found, either the public id is incorrect or the logged in user does not own the project"
+    }
+    ```
+
+### 3.3. Comment On Project
+- **Endpoint:** POST `/api/v1/project/comment/new`
+- **Description:** Allows Users to Comment on Projects.
+- **Request Body:**
+    ```json
+   {
+    "projectPublicId":"Project_Public_Id",
+    "comment":"This is an Amazing Project, Keep it up!!!",
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "message": "Comment Added"
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "Comment Message Required",
+    "error_code": 400,
+    "error_details": "the client did not send comment in the request body"
     }
     ```
 

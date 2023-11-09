@@ -6,7 +6,7 @@ const handleError = require("../utils/errorHandler")
 
 const createProject = async (request, response) => {
     const user = request.user
-    const { projectTitle, projectDescription, html, css, javascript,type} = request.body
+    const { projectTitle, projectDescription, html, css, javascript,type,projectSnapShot} = request.body
 
     try{
 
@@ -32,7 +32,7 @@ const createProject = async (request, response) => {
 
         const publicId = shortid.generate().toLowerCase()
 
-        await Project.create({ owner_username: user.username, owner_id: user._id, owner_picture: user.profilePicture, public_id: publicId, projectTitle, projectDescription, code:{html, css, javascript,}, private: type === "private", public: type === "public" })
+        await Project.create({ owner_username: user.username, owner_id: user._id, owner_picture: user.profilePicture, public_id: publicId, projectTitle,projectSnapShot, projectDescription, code:{html, css, javascript,}, private: type === "private", public: type === "public" })
         
         if (type === "public") {
             const projectsCount = parseInt(user.projectsCount += 1)
@@ -55,7 +55,7 @@ const createProject = async (request, response) => {
 
 const editProject = async (request, response) => {
     
-    const { html, css, javascript, publicId} = request.body
+    const { html, css, javascript, publicId, projectSnapShot} = request.body
     
     try {
         
@@ -76,6 +76,7 @@ const editProject = async (request, response) => {
         project.code.html = html
         project.code.css = css
         project.code.javascript = javascript
+        project.projectSnapShot = projectSnapShot
 
         await project.save()
 
