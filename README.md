@@ -47,6 +47,7 @@
     ```json
    {
     "projectTitle":"Landing Page",
+    "folderId":"Mongo_db_id",//optional (id of folder if project is being added to a folder)
     "projectDescription":"Landing Page Design Test",
     "type":"public",//public or private
     "html":"<h1>Hello World</h1>",
@@ -103,7 +104,6 @@
     "error_details": "Project Was not Found, either the public id is incorrect or the logged in user does not own the project"
     }
     ```
-
 ### 3.3. Comment On Project
 - **Endpoint:** POST `/api/v1/project/comment/new`
 - **Description:** Allows Users to Comment on Projects.
@@ -129,6 +129,111 @@
     "message": "Comment Message Required",
     "error_code": 400,
     "error_details": "the client did not send comment in the request body"
+    }
+    ```
+
+### 3.4. Create Folder
+- **Endpoint:** POST `/api/v1/project/folder/new`
+- **Description:** Allows Other Users to Create a Folder to Oranize their Projects.
+- **Request Parameters:**
+    ```json
+   {
+    "username":"user_name", // username of the owner of the folder
+    "folder":"folderUniqueName", // folder unique name of the requested folder
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "folder": {
+        "_id": "654d13e75cab1400793c728e",
+        "folderName": "Training Projects",
+        "public_id": "d_zsimi-k",
+        "folderUniqueName": "trainingkd",
+        "projects": [
+            {
+                "_id": "654d1557739a988be059e387",
+                "public_id": "houlgwpoi",
+                "projectTitle": "Landing Page",
+                "projectDescription": "Landing Page Design Test2",
+                "likesCount": 0,
+                "commentCount": 0
+            }
+        ],
+        "createdAt": "2023-11-09T17:16:23.693Z"
+    }
+
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "User Not Found",
+    "error_code": 400,
+    "error_details": "The User attached to the folder does not exis, the username appears to be invalid"
+    }
+    ```
+    ```json
+    {
+    "status": false,
+    "message": "Folder Not Found",
+    "error_code": 404,
+    "error_details": "he Request folder does not exist"
+    }
+    ```
+### 3.5. Get User Folder
+- **Endpoint:** GET `/api/v1/project/:username/:folder`
+- **Description:** Allows Other Users to Access all public projects in a particular public folder, for a particular user. `|| Not Authenticated`
+- **Request Parameters:**
+    ```json
+   {
+    "username":"user_name", // username of the owner of the folder
+    "folder":"folderUniqueName", // folder unique name of the requested folder
+   }
+
+    ```
+- **Response (Success):**
+    ```json
+    {
+    "status": true,
+    "folder": {
+        "_id": "654d13e75cab1400793c728e",
+        "folderName": "Training Projects",
+        "public_id": "d_zsimi-k",
+        "folderUniqueName": "trainingkd",
+        "projects": [
+            {
+                "_id": "654d1557739a988be059e387",
+                "public_id": "houlgwpoi",
+                "projectTitle": "Landing Page",
+                "projectDescription": "Landing Page Design Test2",
+                "likesCount": 0,
+                "commentCount": 0
+            }
+        ],
+        "createdAt": "2023-11-09T17:16:23.693Z"
+    }
+
+    }
+    ```
+- **Response (Error):**
+    ```json
+    {
+    "status": false,
+    "message": "User Not Found",
+    "error_code": 400,
+    "error_details": "The User attached to the folder does not exis, the username appears to be invalid"
+    }
+    ```
+    ```json
+    {
+    "status": false,
+    "message": "Folder Not Found",
+    "error_code": 404,
+    "error_details": "he Request folder does not exist"
     }
     ```
 

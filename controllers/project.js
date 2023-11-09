@@ -3,10 +3,11 @@ const shortid = require("shortid")
 const Project = require("../models/project.model")
 const { userManagementDatabase } = require("../config/foreignDb")
 const handleError = require("../utils/errorHandler")
+const Folder = require("../models/folder.model")
 
 const createProject = async (request, response) => {
     const user = request.user
-    const { projectTitle, projectDescription, html, css, javascript,type,projectSnapShot} = request.body
+    const { projectTitle, projectDescription, html, css, javascript,type,projectSnapShot,folderId} = request.body
 
     try{
 
@@ -32,11 +33,21 @@ const createProject = async (request, response) => {
 
         const publicId = shortid.generate().toLowerCase()
 
-        await Project.create({ owner_username: user.username, owner_id: user._id, owner_picture: user.profilePicture, public_id: publicId, projectTitle,projectSnapShot, projectDescription, code:{html, css, javascript,}, private: type === "private", public: type === "public" })
+       const newProject = await Project.create({ owner_username: user.username, owner_id: user._id, owner_picture: user.profilePicture, public_id: publicId, projectTitle,projectSnapShot, projectDescription, code:{html, css, javascript,}, private: type === "private", public: type === "public", folder:folderId})
         
         if (type === "public") {
             const projectsCount = parseInt(user.projectsCount += 1)
             await (await userManagementDatabase()).findOneAndUpdate({ _id: user._id }, { $set: { projectsCount: projectsCount } })
+        }
+
+        if (folderId) {
+            
+            const folder = await Folder.findById(folderId)
+             
+            if (folder) {
+                folder.projects.push(newProject._id)
+                await folder.save()
+            }
         }
         
         response.status(201).json({ status: true, message: "Project Created Successfully", publicId })
@@ -67,7 +78,7 @@ const editProject = async (request, response) => {
             return response.status(400).json(handleError(400, "Public Id Missing", "the client did not send publicId in the request body"))
         }
 
-        const project = await Project.findOne({ owner_id: request.user._id, public_id: publicId })
+        const project = await Project.findOne({ owner_id: request.user._id, public_id: publicId.toLowerCase() })
         
         if (!project) {
             return response.status(400).json(handleError(400, "Project Not Found", "Project Was not Found, either the public id is incorrect or the logged in user does not own the project"))
@@ -97,7 +108,9 @@ const editProject = async (request, response) => {
 
 const commentOnProject = async (request, response) => {
     
-    const { projectPublicId, comment } = request.body
+    let { projectPublicId, comment } = request.body
+
+    projectPublicId = projectPublicId.toLowerCase()
     
     try {
     

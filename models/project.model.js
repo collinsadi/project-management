@@ -24,6 +24,7 @@ const projectSchema = new mongoose.Schema({
     },
     forks: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
+    folder: { type: mongoose.Schema.Types.ObjectId, ref: "folder" },
     comments: [
         {
             user_id: String,
