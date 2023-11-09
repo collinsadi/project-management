@@ -115,7 +115,8 @@ const commentOnProject = async (request, response) => {
             user_picture: request.user.profilePicture,
             user_username: request.user.username,
             comment,
-            public_id: shortid.generate().toLowerCase()
+            public_id: shortid.generate().toLowerCase(),
+            date: new Date()
 
             }
         

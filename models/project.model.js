@@ -30,7 +30,8 @@ const projectSchema = new mongoose.Schema({
             user_picture: String,
             user_username: String,
             comment: String,
-            public_id: String
+            public_id: String,
+            date: Date
         }
     ],
     teamMembers: [String],
