@@ -14,6 +14,14 @@ const projectSchema = new mongoose.Schema({
         javascript: String
     },
     projectSnapShot: String,
+    likesCount: {
+        type: Number,
+        default:0
+    },
+    commentCount: {
+        type: Number,
+        default:0
+    },
     forks: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
     comments: [

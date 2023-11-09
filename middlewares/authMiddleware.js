@@ -22,6 +22,9 @@ const authenticateUser = async (request, response, next) => {
             if (!user) {
             return  response.status(401).json(handleError(401, "Unauthorized", "The Client is Trying to Access an Authorized Endpoint with an Invalid Token"))
             }
+            if (user.blocked) {
+            return  response.status(401).json(handleError(401, "Account Disabled", "The Client is Trying to Access an Authorized Endpoint with a Disabled Account"))
+            }
 
 
             request.user = user

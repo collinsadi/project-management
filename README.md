@@ -57,7 +57,8 @@
     ```json
     {
     "status": true,
-    "message": "Project Created Successfully"
+    "message": "Project Created Successfully",
+    "publicId": "unique_public_id" //this is so the public id can be appended into the url for user to update project without reloading page
     }
     ```
 - **Response (Error):**
