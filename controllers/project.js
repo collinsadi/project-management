@@ -30,6 +30,12 @@ const createProject = async (request, response) => {
             return response.status(400).json(handleError(400, "Bad Request", "the javascript code sent by the client is trying to access users cookies"))
         }
 
+        if (javascript) {
+            if (javascript.includes("eval(") && !projectTitle.toLowerCase().includes("calculator")) {
+            return response.status(400).json(handleError(400, "Bad Request", "the javascript code sent by the client has suspicious codes"))
+        }
+        }
+
         if (!type) {
             return response.status(400).json(handleError(400, "Project Type Missing", "the client did not send type in the request body"))
         }
